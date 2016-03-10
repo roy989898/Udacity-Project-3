@@ -1,0 +1,63 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/widget_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detail_widget_bar"
+            android:background="@color/green04"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/widget_im_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/before_day"
+                android:background="@color/transparent"
+                android:src="@drawable/left_arrow" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/NULL"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/widget_textViewDate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/widget_title_lrft_margin"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white"
+                 />
+
+            <ImageButton
+                android:id="@+id/widget_im_right"
+                android:layout_width="wrap_content"
+                android:contentDescription="@string/next_day"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:src="@drawable/right_arrow" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/widget_listview_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+</FrameLayout>
