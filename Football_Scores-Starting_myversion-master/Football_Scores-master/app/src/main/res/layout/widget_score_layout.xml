@@ -38,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/widget_title_lrft_margin"
+                android:layout_marginStart="@dimen/widget_title_lrft_margin"
                 android:gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"

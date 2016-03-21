@@ -11,7 +11,7 @@ public class MainActivity extends ActionBarActivity {
     public static int selected_match_id;
     public static int current_fragment = 2;
 
-    private final String save_tag = getString(R.string.save_tag);
+    private final String save_tag ="Save Test";
     private PagerFragment my_main;
 
     @Override
