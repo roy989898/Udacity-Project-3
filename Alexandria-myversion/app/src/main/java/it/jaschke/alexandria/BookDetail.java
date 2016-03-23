@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,11 +45,12 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("BookDetail", "onCreateView");
 
         Bundle arguments = getArguments();
         if (arguments != null) {
             ean = arguments.getString(BookDetail.EAN_KEY);
-            getLoaderManager().restartLoader(LOADER_ID, null, this);
+//            getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
 
         rootView = inflater.inflate(R.layout.fragment_full_book, container, false);
@@ -68,10 +70,19 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        Log.d("BookDetail", "onCreateOptionsMenu");
         inflater.inflate(R.menu.book_detail, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_share);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+//            ean = arguments.getString(BookDetail.EAN_KEY);
+            getLoaderManager().restartLoader(LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -113,10 +124,11 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
             authorsArr = new String[0];
         } else {
             authorsArr = authors.split(",");
+            ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
+            ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
         }
 
-        ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
-        ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
+
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
             new DownloadImage((ImageView) rootView.findViewById(R.id.fullBookCover)).execute(imgUrl);
@@ -125,10 +137,10 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
         String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
         ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
-
-        if (rootView.findViewById(R.id.right_container) != null) {
+//no need the custom back button
+        /*if (rootView.findViewById(R.id.right_container) != null) {
             rootView.findViewById(R.id.backButton).setVisibility(View.INVISIBLE);
-        }
+        }*/
 
     }
 

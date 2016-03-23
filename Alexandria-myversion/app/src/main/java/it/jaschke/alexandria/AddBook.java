@@ -29,10 +29,10 @@ import it.jaschke.alexandria.services.DownloadImage;
 
 
 public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String BRODCAST_ACTION = "it.jaschke.alexandria.brodcastmessage";
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
     private static final String SCAN_FORMAT = "scanFormat";
     private static final String SCAN_CONTENTS = "scanContents";
-    public static final String BRODCAST_ACTION = "it.jaschke.alexandria.brodcastmessage";
     private final int LOADER_ID = 1;
     private final int BARCODE_SCANNER_REQUEST_CODE = 174;
     private final String EAN_CONTENT = "eanContent";
@@ -66,7 +66,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 ean.setText(contents);
             } else if (resultCode == activity.RESULT_CANCELED) {
                 //  Handle cancel
-                Toast.makeText(activity,getString(R.string.scan_cancel),Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, getString(R.string.scan_cancel), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -76,7 +76,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
         rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
         ean = (EditText) rootView.findViewById(R.id.ean);
-        if (savedInstanceState!=null){
+        if (savedInstanceState != null) {
             ean.setText(savedInstanceState.getString(EAN_CONTENT));
         }
 
@@ -108,8 +108,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 bookIntent.putExtra(BookService.EAN, ean);
                 bookIntent.setAction(BookService.FETCH_BOOK);
                 //register the brodcast receiver
-                MyBrodcastReceiver mybrodcastReceiver=new MyBrodcastReceiver();
-                IntentFilter intentFilter=new IntentFilter(BRODCAST_ACTION);
+                MyBrodcastReceiver mybrodcastReceiver = new MyBrodcastReceiver();
+                IntentFilter intentFilter = new IntentFilter(BRODCAST_ACTION);
                 getActivity().registerReceiver(mybrodcastReceiver, intentFilter);
                 //
                 getActivity().startService(bookIntent);
@@ -211,9 +211,16 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
 
         String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
-        ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
-        ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
+        String[] authorsArr = null;
+        if (authors == null) {
+            authorsArr = new String[0];
+        } else {
+            authorsArr = authors.split(",");
+            ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
+            ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
+        }
+
+
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
             new DownloadImage((ImageView) rootView.findViewById(R.id.bookCover)).execute(imgUrl);
@@ -247,7 +254,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         super.onAttach(activity);
         activity.setTitle(R.string.scan);
     }
-    private class MyBrodcastReceiver extends BroadcastReceiver{
+
+    private class MyBrodcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             //when receive the message(Service finish),start the Cursor Loader.
